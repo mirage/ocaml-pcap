@@ -1,0 +1,12 @@
+# OASIS_START
+# DO NOT EDIT (digest: 64851c4fe93e95b9571af4d7282bf552)
+version = "0.1"
+description = "Pcap tools"
+requires = "cstruct cstruct.syntax"
+archive(byte) = "pcap.cma"
+archive(byte, plugin) = "pcap.cma"
+archive(native) = "pcap.cmxa"
+archive(native, plugin) = "pcap.cmxs"
+exists_if = "pcap.cma"
+# OASIS_STOP
+
