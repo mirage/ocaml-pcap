@@ -1,5 +1,6 @@
 (*
  * Copyright (c) 2012 Anil Madhavapeddy <anil@recoil.org>
+ *           (c) 2012 Citrix Systems
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -17,8 +18,9 @@
 open Pcap
 open Printf
 
-let parse () =
-  let fd = Unix.(openfile "http.cap" [O_RDONLY] 0) in
+let parse filename =
+  printf "filename: %s\n" filename;
+  let fd = Unix.(openfile filename [O_RDONLY] 0) in
   let buf = Bigarray.(Array1.map_file fd Bigarray.char c_layout false (-1)) in
   printf "total pcap file length %d\n" (Cstruct.len buf);
 
@@ -36,4 +38,10 @@ let parse () =
   in
   printf "num_packets %d\n" num_packets
 
-let _ = parse ()
+let _ =
+  let files = ref [] in
+  Arg.parse []
+    (fun x -> files := x :: !files)
+    "Dump the contents of pcap files";
+  let files = List.rev !files in
+  List.iter parse files
