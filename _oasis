@@ -1,6 +1,6 @@
 OASISFormat: 0.2
 Name:        pcap
-Version:     1.0
+Version:     0.1
 Synopsis:    Pcap tools
 Authors:     Anil Madhavapeddy, Dave Scott
 License:     ISC
