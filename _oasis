@@ -1,0 +1,23 @@
+OASISFormat: 0.2
+Name:        pcap
+Version:     1.0
+Synopsis:    Pcap tools
+Authors:     Anil Madhavapeddy, Dave Scott
+License:     ISC
+Plugins:     META (0.2)
+BuildTools:  ocamlbuild
+
+Library pcap
+  CompiledObject:     best
+  Path:               lib
+  Findlibname:        pcap
+  Modules:            Pcap
+  BuildDepends:       cstruct, cstruct.syntax
+
+Executable print
+  CompiledObject:     best
+  Path:               print
+  MainIs:             print.ml
+  Custom:             true
+  Install:            false
+  BuildDepends:       lwt, lwt.unix, pcap
