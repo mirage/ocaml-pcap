@@ -4,12 +4,13 @@ NAME=pcap
 J=4
 
 UNIX ?= $(shell if ocamlfind query lwt.unix >/dev/null 2>&1; then echo --enable-unix; fi)
+MIRAGE ?= $(shell if ocamlfind query mirage-net >/dev/null 2>&1; then echo --enable-mirage; fi)
 
 setup.ml: _oasis
 	oasis setup
 
 setup.data: setup.ml
-	ocaml setup.ml -configure $(UNIX)
+	ocaml setup.ml -configure $(UNIX) $(MIRAGE)
 
 build: setup.data setup.ml
 	ocaml setup.ml -build -j $(J)
