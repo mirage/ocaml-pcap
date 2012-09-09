@@ -7,6 +7,10 @@ License:     ISC
 Plugins:     META (0.2)
 BuildTools:  ocamlbuild
 
+Flag unix
+  Description: build the Unix binary
+  Default: false
+
 Library pcap
   CompiledObject:     best
   Path:               lib
@@ -15,6 +19,7 @@ Library pcap
   BuildDepends:       cstruct, cstruct.syntax
 
 Executable print
+  Build$:             flag(unix)
   CompiledObject:     best
   Path:               print
   MainIs:             print.ml

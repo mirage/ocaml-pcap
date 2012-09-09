@@ -3,11 +3,13 @@ all: build
 NAME=pcap
 J=4
 
+UNIX ?= $(shell if ocamlfind query lwt.unix >/dev/null 2>&1; then echo --enable-unix; fi)
+
 setup.ml: _oasis
 	oasis setup
 
 setup.data: setup.ml
-	ocaml setup.ml -configure
+	ocaml setup.ml -configure $(UNIX)
 
 build: setup.data setup.ml
 	ocaml setup.ml -build -j $(J)
