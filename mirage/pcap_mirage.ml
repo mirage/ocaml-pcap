@@ -19,14 +19,18 @@ open OS
 open Net.Ethif
 open Pcap
 
+let capture_limit = 64
+(** Buffer this many packets before we start to drop *)
+
 (* We lack a decent file abstraction so we'll experiment with representing
    open files as threads which read commands from an mvar. *)
 
-type fd = Cstruct.buf option Lwt_mvar.t
+type fd = Cstruct.buf list option Lwt_mvar.t
 
 let open_blkif blkif : fd =
   let m : fd = Lwt_mvar.create_empty () in
-  let offset = ref 0L in
+  let page_offset = ref 0L in
+  let buf_offset = ref 0 in
   let closed = ref false in
   let buf = Io_page.get () in
   let (_: unit Lwt.t) =
@@ -36,12 +40,29 @@ let open_blkif blkif : fd =
       | None ->
         closed := true;
         return ()
-      | Some (frag: Cstruct.buf) ->
-        (* Copy into 'buf', effectively padding to a whole page *)
-        Cstruct.blit_buffer frag 0 buf 0 (Cstruct.len buf);
-        lwt () = blkif#write_page !offset buf in
-        offset := Int64.(add !offset (of_int (Cstruct.len frag)));
-        return ()
+      | Some (frags: Cstruct.buf list) ->
+        let single_write frag =
+          let available_space = 4096 - !buf_offset in
+          let needed_space = Cstruct.len frag in
+          if needed_space >= available_space then begin
+            Cstruct.blit_buffer frag 0 buf !buf_offset available_space;
+            lwt () = blkif#write_page !page_offset buf in
+            page_offset := Int64.add !page_offset 4096L;
+            buf_offset := 0;
+            return available_space
+          end else begin
+            Cstruct.blit_buffer frag 0 buf !buf_offset needed_space;
+            buf_offset := !buf_offset + needed_space;
+            return needed_space
+          end in
+        let write frag =
+          let remaining = ref frag in
+          while_lwt Cstruct.len !remaining > 0 do
+            lwt written = single_write !remaining in
+            remaining := Cstruct.shift !remaining written;
+            return ()
+          done in
+        Lwt_list.iter_s write frags  
     done in
   m
 
@@ -54,21 +75,24 @@ let capture input fd =
   set_pcap_header_sigfigs buf 0l;
   set_pcap_header_snaplen buf 4096l;
   set_pcap_header_network buf network_ethernet;
-  lwt () = Lwt_mvar.put fd (Some(Cstruct.sub buf 0 sizeof_pcap_header)) in
+  lwt () = Lwt_mvar.put fd (Some [Cstruct.sub buf 0 sizeof_pcap_header] ) in
+
+  set_capture_limit capture_limit input;
+  OS.Console.log (Printf.sprintf "pcap: set capture limit to %d" capture_limit);
 
   let stream = get_captured_packets input in
   try_lwt
     while_lwt true do
-      let batchsize = 16 in
-      lwt packets = Lwt_bounded_stream.nget batchsize stream in
+      lwt packets = Lwt_bounded_stream.nget 1 stream in
       Lwt_list.iter_s
-        (fun (time, packet) ->
+        (fun (time, frags) ->
+          let len = List.fold_left (+) 0 (List.map Cstruct.len frags) in
+          let buf = OS.Io_page.get () in
           set_pcap_packet_ts_sec buf (Int32.(of_float time));
-          set_pcap_packet_ts_usec buf (Int32.rem (Int32.of_float (time *. 1000000.)) 1000000l);
-          set_pcap_packet_incl_len buf (Int32.of_int (Cstruct.len packet));
-          set_pcap_packet_orig_len buf (Int32.of_int (Cstruct.len packet));
-          lwt () = Lwt_mvar.put fd (Some(Cstruct.sub buf 0 sizeof_pcap_packet)) in
-          Lwt_mvar.put fd (Some packet);
+          set_pcap_packet_ts_usec buf (Int32.rem (Int32.of_float ( time *. 1000000.)) 1000000l);
+          set_pcap_packet_incl_len buf (Int32.of_int len);
+          set_pcap_packet_orig_len buf (Int32.of_int len);
+          Lwt_mvar.put fd (Some (Cstruct.sub buf 0 sizeof_pcap_packet :: frags))
         ) packets
     done
   with Lwt_stream.Closed ->

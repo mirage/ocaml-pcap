@@ -31,9 +31,9 @@ cstruct pcap_packet {
   uint32_t orig_len        (* actual length of packet *)
 } as little_endian
 
-let magic_number_bigendian = 0xa1b2c3d4l
+let magic_number_littleendian = 0xa1b2c3d4l
 
-let magic_number_littleendian = 0xd4c3b2a1l
+let magic_number_bigendian = 0xd4c3b2a1l
 
 let major_version = 2
 
