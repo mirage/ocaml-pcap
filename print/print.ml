@@ -16,6 +16,7 @@
  *)
 
 open Pcap
+open Pcap_print
 open Printf
 
 let parse filename =
