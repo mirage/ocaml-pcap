@@ -15,6 +15,7 @@
  *)
 
 open Pcap
+open LE
 
 cstruct ethernet {
   uint8_t        dst[6];
@@ -90,7 +91,9 @@ let print_packet p =
   end
   |_ -> printf "unknown body\n"
  
-let rec print_pcap_packet (hdr,pkt) =
+let rec print_pcap_packet h (hdr,pkt) =
+  let module H = (val h: HDR) in
+  let open H in
   printf "\n** %lu.%lu  bytes %lu (of %lu)\n" 
     (get_pcap_packet_ts_sec hdr)
     (get_pcap_packet_ts_usec hdr)
@@ -98,21 +101,17 @@ let rec print_pcap_packet (hdr,pkt) =
     (get_pcap_packet_orig_len hdr);
   print_packet pkt
   
-let print_pcap_header buf =
-  let magic = get_pcap_header_magic_number buf in
-  let endian =
-    if magic = magic_number_bigendian
-    then "bigendian"
-    else if magic = magic_number_littleendian
-    then "littleendian"
-    else "not a pcap file"
-  in
+let print_pcap_header h buf =
+  let module H = (val h: HDR) in
+  let open H in
   printf "pcap_header (len %d)\n" sizeof_pcap_header;
-  printf "magic_number %lx (%s)\n%!" magic endian;
+  printf "endian: %s\n" (string_of_endian H.endian);
   printf "version %d %d\n" 
    (get_pcap_header_version_major buf) (get_pcap_header_version_minor buf);
   printf "timezone shift %lu\n" (get_pcap_header_thiszone buf);
   printf "timestamp accuracy %lu\n" (get_pcap_header_sigfigs buf);
   printf "snaplen %lu\n" (get_pcap_header_snaplen buf);
   printf "lltype %lx\n" (get_pcap_header_network buf)
+
+
 

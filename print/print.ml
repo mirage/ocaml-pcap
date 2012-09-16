@@ -16,6 +16,7 @@
  *)
 
 open Pcap
+open LE
 open Pcap_print
 open Printf
 
@@ -26,18 +27,19 @@ let parse filename =
   printf "total pcap file length %d\n" (Cstruct.len buf);
 
   let header, body = Cstruct.split buf sizeof_pcap_header in
-  print_pcap_header header;
+  match Pcap.detect header with
+  | Some h ->
+    print_pcap_header h header;
 
-  let packets = Cstruct.iter 
-    (fun buf -> Some (sizeof_pcap_packet + (Int32.to_int (get_pcap_packet_incl_len buf))))
-    (fun buf -> buf, (Cstruct.shift buf sizeof_pcap_packet))
-    body
-  in 
-  let num_packets = Cstruct.fold
-    (fun a packet -> print_pcap_packet packet; (a+1)) 
-    packets 0
-  in
-  printf "num_packets %d\n" num_packets
+    let packets = Pcap.packets h body in
+
+    let num_packets = Cstruct.fold
+      (fun a packet -> print_pcap_packet h packet; (a+1)) 
+      packets 0
+    in
+    printf "num_packets %d\n" num_packets
+  | None ->
+    Printf.fprintf stderr "not a pcap file (failed to read magic number in header)\n%!"
 
 let _ =
   let files = ref [] in
