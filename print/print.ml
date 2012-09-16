@@ -16,7 +16,6 @@
  *)
 
 open Pcap
-open LE
 open Pcap_print
 open Printf
 

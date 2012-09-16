@@ -67,9 +67,38 @@ module BE = struct
   } as big_endian
 end
 
+let sizeof_pcap_header = BE.sizeof_pcap_header (* = LE.sizeof_pcap_header *)
+
+let sizeof_pcap_packet = BE.sizeof_pcap_packet (* = LE.sizeof_pcap_packet *)
+
 module type HDR = sig
   val endian: endian
 
+  val get_pcap_header_magic_number: Cstruct.buf -> int32
+  val get_pcap_header_version_major: Cstruct.buf -> int
+  val get_pcap_header_version_minor: Cstruct.buf -> int
+  val get_pcap_header_thiszone: Cstruct.buf -> int32
+  val get_pcap_header_sigfigs: Cstruct.buf -> int32
+  val get_pcap_header_snaplen: Cstruct.buf -> int32
+  val get_pcap_header_network: Cstruct.buf -> int32
+
+  val set_pcap_header_magic_number: Cstruct.buf -> int32 -> unit
+  val set_pcap_header_version_major: Cstruct.buf -> int -> unit
+  val set_pcap_header_version_minor: Cstruct.buf -> int -> unit
+  val set_pcap_header_thiszone: Cstruct.buf -> int32 -> unit
+  val set_pcap_header_sigfigs: Cstruct.buf -> int32 -> unit
+  val set_pcap_header_snaplen: Cstruct.buf -> int32 -> unit
+  val set_pcap_header_network: Cstruct.buf -> int32 -> unit
+
+  val get_pcap_packet_ts_sec: Cstruct.buf -> int32
+  val get_pcap_packet_ts_usec: Cstruct.buf -> int32
+  val get_pcap_packet_incl_len: Cstruct.buf -> int32
+  val get_pcap_packet_orig_len: Cstruct.buf -> int32
+
+  val set_pcap_packet_ts_sec: Cstruct.buf -> int32 -> unit
+  val set_pcap_packet_ts_usec: Cstruct.buf -> int32 -> unit
+  val set_pcap_packet_incl_len: Cstruct.buf -> int32 -> unit
+  val set_pcap_packet_orig_len: Cstruct.buf -> int32 -> unit
 end
 
 let magic_number = 0xa1b2c3d4l
@@ -83,10 +112,11 @@ let detect buf =
 
 let packets h =
   let module H = (val h : HDR) in
-  let open LE in (* XXX *)
   Cstruct.iter 
-    (fun buf -> Some (sizeof_pcap_packet + (Int32.to_int (get_pcap_packet_incl_len buf))))
+    (fun buf -> Some (sizeof_pcap_packet + (Int32.to_int (H.get_pcap_packet_incl_len buf))))
     (fun buf -> buf, (Cstruct.shift buf sizeof_pcap_packet))
 
+(*
 let network_ethernet = 1l
 (** pcap_header network value indicating ethernet *)
+*)

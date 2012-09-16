@@ -15,7 +15,6 @@
  *)
 
 open Pcap
-open LE
 
 cstruct ethernet {
   uint8_t        dst[6];
