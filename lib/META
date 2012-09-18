@@ -1,6 +1,6 @@
 # OASIS_START
-# DO NOT EDIT (digest: 463e544e9d1037cafbc32f3d5d238cf7)
-version = "0.3.1"
+# DO NOT EDIT (digest: 9185edc693fcbd2954e2117070209a81)
+version = "0.3.2"
 description = "Pcap tools"
 requires = "cstruct cstruct.syntax"
 archive(byte) = "pcap.cma"
