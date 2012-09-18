@@ -38,6 +38,6 @@
 <print/*.ml{,i}>: pkg_cstruct.syntax
 <print/print.{native,byte}>: custom
 # OASIS_STOP
-<**/*.ml>: syntax_camlp4o, pkg_camlp4
+<**/*.ml{,i}>: syntax_camlp4o, pkg_camlp4
 true: annot
 

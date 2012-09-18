@@ -1,6 +1,6 @@
 # OASIS_START
-# DO NOT EDIT (digest: 735cab180886bfb3aba146396ca11ba7)
-version = "0.1"
+# DO NOT EDIT (digest: f7c45aa484d44b13eb9c71667e9762f1)
+version = "0.1.0"
 description = "Pcap tools"
 requires = "cstruct cstruct.syntax"
 archive(byte) = "pcap.cma"
@@ -9,7 +9,7 @@ archive(native) = "pcap.cmxa"
 archive(native, plugin) = "pcap.cmxs"
 exists_if = "pcap.cma"
 package "mirage" (
- version = "0.1"
+ version = "0.1.0"
  description = "Pcap tools"
  requires = "mirage-net pcap lwt lwt.syntax"
  archive(byte) = "mirage.cma"
