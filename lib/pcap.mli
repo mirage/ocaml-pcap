@@ -33,6 +33,52 @@ val sizeof_pcap_header: int
 val sizeof_pcap_packet: int
 (** The size of the per-packet pcap headers in bytes *)
 
+module LE : sig
+
+  val endian : endian
+
+  cstruct pcap_header {
+    uint32_t magic_number;   (* magic number *)
+    uint16_t version_major;  (* major version number *)
+    uint16_t version_minor;  (* minor version number *)
+    uint32_t thiszone;       (* GMT to local correction *)
+    uint32_t sigfigs;        (* accuracy of timestamps *)
+    uint32_t snaplen;        (* max length of captured packets, in octets *)
+    uint32_t network         (* data link type *)
+  } as little_endian
+
+  cstruct pcap_packet {
+    uint32_t ts_sec;         (* timestamp seconds *)
+    uint32_t ts_usec;        (* timestamp microseconds *)
+    uint32_t incl_len;       (* number of octets of packet saved in file *)
+    uint32_t orig_len        (* actual length of packet *)
+  } as little_endian
+
+end
+
+module BE : sig
+
+  val endian : endian
+
+  cstruct pcap_header {
+    uint32_t magic_number;   (* magic number *)
+    uint16_t version_major;  (* major version number *)
+    uint16_t version_minor;  (* minor version number *)
+    uint32_t thiszone;       (* GMT to local correction *)
+    uint32_t sigfigs;        (* accuracy of timestamps *)
+    uint32_t snaplen;        (* max length of captured packets, in octets *)
+    uint32_t network         (* data link type *)
+  } as big_endian
+
+  cstruct pcap_packet {
+    uint32_t ts_sec;         (* timestamp seconds *)
+    uint32_t ts_usec;        (* timestamp microseconds *)
+    uint32_t incl_len;       (* number of octets of packet saved in file *)
+    uint32_t orig_len        (* actual length of packet *)
+  } as big_endian
+
+end
+
 module type HDR = sig
   (** Functions to read/write pcap header fields of a particular
       endian-ness *)
