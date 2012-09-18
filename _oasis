@@ -1,6 +1,6 @@
-OASISFormat: 0.2
+OASISFormat: 0.3
 Name:        pcap
-Version:     0.1
+Version:     0.1.0
 Synopsis:    Pcap tools
 Authors:     Anil Madhavapeddy, Dave Scott
 License:     ISC
@@ -20,7 +20,7 @@ Library pcap
   Path:               lib
   Findlibname:        pcap
   Modules:            Pcap
-  BuildDepends:       cstruct, cstruct.syntax
+  BuildDepends:       cstruct ( >= 0.5.0 ), cstruct.syntax
 
 Library mirage
   Build$:             flag(mirage)
@@ -48,7 +48,3 @@ Executable test
   CompiledObject:     best
   Install:            false
   BuildDepends:       lwt, lwt.unix, cstruct, pcap, oUnit
-
-Flag tests
-  Description:        Build and run tests
-  Default:            true
