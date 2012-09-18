@@ -33,6 +33,22 @@ val sizeof_pcap_header: int
 val sizeof_pcap_packet: int
 (** The size of the per-packet pcap headers in bytes *)
 
+val magic_number: int32
+(** The magic number which identifies a pcap file (and endian-ness) *)
+
+module Network : sig
+  (** Type of outermost network protocol within the captured frames *)
+
+  type t =
+    | Ethernet
+    | Ieee80211
+
+  val to_int32: t -> int32
+
+  val of_int32: int32 -> t option
+
+end
+
 module LE : sig
 
   val endian : endian

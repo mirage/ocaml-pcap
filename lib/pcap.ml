@@ -31,6 +31,29 @@ let string_of_endian = function
    enough to make it worthwhile to bother detecting native endian-ness and
    switching. *)
 
+module Network = struct
+
+  type t =
+    | Ethernet
+    | Ieee80211
+
+  let t_to_int32 = [
+      Ethernet,  1l
+    ; Ieee80211, 105l
+  ]
+
+  let int32_to_t = List.map (fun (x, y) -> y, x) t_to_int32
+
+  let to_int32 x = List.assoc x t_to_int32
+
+  let of_int32 x =
+    if List.mem_assoc x int32_to_t
+    then Some (List.assoc x int32_to_t)
+    else None
+
+end
+
+
 module LE = struct
   let endian = Little
 

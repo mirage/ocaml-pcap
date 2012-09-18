@@ -16,8 +16,9 @@
 
 open Lwt
 open OS
-open Net.Ethif
+(*open Net.Ethif *)
 open Pcap
+open Pcap.LE (* write in little-endian format *)
 
 let capture_limit = 64
 (** Buffer this many packets before we start to drop *)
@@ -68,13 +69,13 @@ let open_blkif blkif : fd =
 
 let capture input fd =
   let buf = OS.Io_page.get () in
-  set_pcap_header_magic_number buf magic_number_littleendian;
+  set_pcap_header_magic_number buf magic_number;
   set_pcap_header_version_major buf major_version;
   set_pcap_header_version_minor buf minor_version;
   set_pcap_header_thiszone buf 0l;
   set_pcap_header_sigfigs buf 0l;
   set_pcap_header_snaplen buf 4096l;
-  set_pcap_header_network buf network_ethernet;
+  set_pcap_header_network buf (Network.(to_int32 Ethernet));
   lwt () = Lwt_mvar.put fd (Some [Cstruct.sub buf 0 sizeof_pcap_header] ) in
 
   set_capture_limit capture_limit input;
