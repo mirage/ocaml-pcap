@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 7fe842995f4991c2b872623f87cbdd5e)
+# DO NOT EDIT (digest: 7fec0955b1fdff1eda5184c0e07ab8ed)
 # Ignore VCS directories, you can use the same kind of rule outside 
 # OASIS_START/STOP if you want to exclude directories that contains 
 # useless stuff for the build process
@@ -17,14 +17,6 @@
 "lib/pcap.cmxs": use_pcap
 <lib/*.ml{,i}>: pkg_cstruct
 <lib/*.ml{,i}>: pkg_cstruct.syntax
-# Library mirage
-"mirage/mirage.cmxs": use_mirage
-<mirage/*.ml{,i}>: use_pcap
-<mirage/*.ml{,i}>: pkg_lwt
-<mirage/*.ml{,i}>: pkg_cstruct
-<mirage/*.ml{,i}>: pkg_mirage-net
-<mirage/*.ml{,i}>: pkg_lwt.syntax
-<mirage/*.ml{,i}>: pkg_cstruct.syntax
 # Executable print
 <print/print.{native,byte}>: use_pcap
 <print/print.{native,byte}>: pkg_lwt
