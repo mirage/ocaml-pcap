@@ -19,7 +19,7 @@ Library pcap
   CompiledObject:     best
   Path:               lib
   Findlibname:        pcap
-  Modules:            Pcap, Pcap_print
+  Modules:            Pcap
   BuildDepends:       cstruct ( >= 0.5.0 ), cstruct.syntax
 
 Library mirage
@@ -39,3 +39,12 @@ Executable print
   Custom:             true
   Install:            false
   BuildDepends:       lwt, lwt.unix, pcap
+
+Executable test
+  Path:               lib_test
+  MainIs:             test.ml
+  Build$:             flag(tests)
+  Custom:             true
+  CompiledObject:     best
+  Install:            false
+  BuildDepends:       lwt, lwt.unix, cstruct, pcap, oUnit
