@@ -31,7 +31,13 @@ let header () =
   match Pcap.detect buf with
   | Some h ->
 	  let module H = (val h: HDR) in
-	  assert_equal ~msg:"endian" ~printer:string_of_endian H.endian Little
+	  assert_equal ~msg:"endian"        ~printer:string_of_endian H.endian                             Little;
+	  assert_equal ~msg:"version_major" ~printer:string_of_int   (H.get_pcap_header_version_major buf) 2;
+	  assert_equal ~msg:"version_minor" ~printer:string_of_int   (H.get_pcap_header_version_minor buf) 4;
+	  assert_equal ~msg:"thiszone"      ~printer:Int32.to_string (H.get_pcap_header_thiszone buf)      0l;
+	  assert_equal ~msg:"sigfigs"       ~printer:Int32.to_string (H.get_pcap_header_sigfigs buf)       0l;
+	  assert_equal ~msg:"snaplen"       ~printer:Int32.to_string (H.get_pcap_header_snaplen buf)       65535l;
+	  assert_equal ~msg:"network"       ~printer:Int32.to_string (H.get_pcap_header_network buf)       1l;
   | None ->
 	  failwith (Printf.sprintf "failed to parse pcap header from %s" example_file)
 
