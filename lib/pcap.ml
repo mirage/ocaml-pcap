@@ -1,5 +1,6 @@
 (*
  * Copyright (c) 2012 Anil Madhavapeddy <anil@recoil.org>
+ * Copyright (C) 2012 Citrix Systems Inc
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -23,6 +24,12 @@ type endian = | Big | Little
 let string_of_endian = function
 | Big    -> "big"
 | Little -> "little"
+
+(* The pcap format allows the writer to use either big- or little- endian,
+   depending on which is most convenient (higher performance). We are able
+   to read both, but we haven't optimised the low-level set_* functions
+   enough to make it worthwhile to bother detecting native endian-ness and
+   switching. *)
 
 module LE = struct
   let endian = Little
@@ -116,7 +123,3 @@ let packets h =
     (fun buf -> Some (sizeof_pcap_packet + (Int32.to_int (H.get_pcap_packet_incl_len buf))))
     (fun buf -> buf, (Cstruct.shift buf sizeof_pcap_packet))
 
-(*
-let network_ethernet = 1l
-(** pcap_header network value indicating ethernet *)
-*)
