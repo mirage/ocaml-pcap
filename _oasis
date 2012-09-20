@@ -28,7 +28,7 @@ Library mirage
   Path:               mirage
   Findlibname:        mirage
   Findlibparent:      pcap
-  Modules:            Pcap_mirage
+  Modules:            Pcap_mirage, Lwt_bounded_stream
   BuildDepends:       mirage-net, pcap, lwt, lwt.syntax
 
 Executable print

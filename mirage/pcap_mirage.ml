@@ -16,7 +16,6 @@
 
 open Lwt
 open OS
-(*open Net.Ethif *)
 open Pcap
 open Pcap.LE (* write in little-endian format *)
 
@@ -28,7 +27,9 @@ let capture_limit = 64
 
 type fd = Cstruct.buf list option Lwt_mvar.t
 
-let open_blkif blkif : fd =
+let write fd bufs = Lwt_mvar.put fd (Some bufs)
+
+let open_device blkif : fd =
   let m : fd = Lwt_mvar.create_empty () in
   let page_offset = ref 0L in
   let buf_offset = ref 0 in
@@ -67,7 +68,19 @@ let open_blkif blkif : fd =
     done in
   m
 
-let capture input fd =
+let start_capture (input: Net.Ethif.t) fd =
+  let stream, push = Lwt_bounded_stream.create capture_limit in
+
+  Net.Ethif.set_promiscuous input (function
+   | Net.Ethif.Input buf ->
+      push (Some (OS.Clock.time (), [ buf ]));
+      (* since this was an input frame, we want to process it as normal *)
+      Net.Ethif.default_process input buf
+   | Net.Ethif.Output bufs ->
+      push (Some (OS.Clock.time (), bufs));
+      return ()
+  );
+
   let buf = OS.Io_page.get () in
   set_pcap_header_magic_number buf magic_number;
   set_pcap_header_version_major buf major_version;
@@ -76,12 +89,8 @@ let capture input fd =
   set_pcap_header_sigfigs buf 0l;
   set_pcap_header_snaplen buf 4096l;
   set_pcap_header_network buf (Network.(to_int32 Ethernet));
-  lwt () = Lwt_mvar.put fd (Some [Cstruct.sub buf 0 sizeof_pcap_header] ) in
+  lwt () = write fd [Cstruct.sub buf 0 sizeof_pcap_header] in
 
-  set_capture_limit capture_limit input;
-  OS.Console.log (Printf.sprintf "pcap: set capture limit to %d" capture_limit);
-
-  let stream = get_captured_packets input in
   try_lwt
     while_lwt true do
       lwt packets = Lwt_bounded_stream.nget 1 stream in
@@ -93,7 +102,7 @@ let capture input fd =
           set_pcap_packet_ts_usec buf (Int32.rem (Int32.of_float ( time *. 1000000.)) 1000000l);
           set_pcap_packet_incl_len buf (Int32.of_int len);
           set_pcap_packet_orig_len buf (Int32.of_int len);
-          Lwt_mvar.put fd (Some (Cstruct.sub buf 0 sizeof_pcap_packet :: frags))
+          write fd (Cstruct.sub buf 0 sizeof_pcap_packet :: frags)
         ) packets
     done
   with Lwt_stream.Closed ->
