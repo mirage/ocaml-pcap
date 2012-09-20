@@ -11,12 +11,25 @@ Flag unix
   Description: build the Unix binary
   Default: false
 
+Flag mirage
+  Description: build the mirage library
+  Default: false
+
 Library pcap
   CompiledObject:     best
   Path:               lib
   Findlibname:        pcap
   Modules:            Pcap
   BuildDepends:       cstruct ( >= 0.5.0 ), cstruct.syntax
+
+Library mirage
+  Build$:             flag(mirage)
+  CompiledObject:     best
+  Path:               mirage
+  Findlibname:        mirage
+  Findlibparent:      pcap
+  Modules:            Pcap_mirage
+  BuildDepends:       mirage-net, pcap, lwt, lwt.syntax
 
 Executable print
   Build$:             flag(unix)
