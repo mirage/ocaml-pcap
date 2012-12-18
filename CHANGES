@@ -1,0 +1,7 @@
+0.3.2 (trunk):
+* Add Lwt_bounded implementation to constrain size of packet captures.
+
+0.3.1 (Sep 2012): 
+* Support dumping a pcap trace to a block device.
+* Use `cstruct` signature generators to tidy up pcap interface.
+* Initial public release.
