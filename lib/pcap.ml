@@ -104,31 +104,31 @@ let sizeof_pcap_packet = BE.sizeof_pcap_packet (* = LE.sizeof_pcap_packet *)
 module type HDR = sig
   val endian: endian
 
-  val get_pcap_header_magic_number: Cstruct.buf -> int32
-  val get_pcap_header_version_major: Cstruct.buf -> int
-  val get_pcap_header_version_minor: Cstruct.buf -> int
-  val get_pcap_header_thiszone: Cstruct.buf -> int32
-  val get_pcap_header_sigfigs: Cstruct.buf -> int32
-  val get_pcap_header_snaplen: Cstruct.buf -> int32
-  val get_pcap_header_network: Cstruct.buf -> int32
+  val get_pcap_header_magic_number: Cstruct.t -> int32
+  val get_pcap_header_version_major: Cstruct.t -> int
+  val get_pcap_header_version_minor: Cstruct.t -> int
+  val get_pcap_header_thiszone: Cstruct.t -> int32
+  val get_pcap_header_sigfigs: Cstruct.t -> int32
+  val get_pcap_header_snaplen: Cstruct.t -> int32
+  val get_pcap_header_network: Cstruct.t -> int32
 
-  val set_pcap_header_magic_number: Cstruct.buf -> int32 -> unit
-  val set_pcap_header_version_major: Cstruct.buf -> int -> unit
-  val set_pcap_header_version_minor: Cstruct.buf -> int -> unit
-  val set_pcap_header_thiszone: Cstruct.buf -> int32 -> unit
-  val set_pcap_header_sigfigs: Cstruct.buf -> int32 -> unit
-  val set_pcap_header_snaplen: Cstruct.buf -> int32 -> unit
-  val set_pcap_header_network: Cstruct.buf -> int32 -> unit
+  val set_pcap_header_magic_number: Cstruct.t -> int32 -> unit
+  val set_pcap_header_version_major: Cstruct.t -> int -> unit
+  val set_pcap_header_version_minor: Cstruct.t -> int -> unit
+  val set_pcap_header_thiszone: Cstruct.t -> int32 -> unit
+  val set_pcap_header_sigfigs: Cstruct.t -> int32 -> unit
+  val set_pcap_header_snaplen: Cstruct.t -> int32 -> unit
+  val set_pcap_header_network: Cstruct.t -> int32 -> unit
 
-  val get_pcap_packet_ts_sec: Cstruct.buf -> int32
-  val get_pcap_packet_ts_usec: Cstruct.buf -> int32
-  val get_pcap_packet_incl_len: Cstruct.buf -> int32
-  val get_pcap_packet_orig_len: Cstruct.buf -> int32
+  val get_pcap_packet_ts_sec: Cstruct.t -> int32
+  val get_pcap_packet_ts_usec: Cstruct.t -> int32
+  val get_pcap_packet_incl_len: Cstruct.t -> int32
+  val get_pcap_packet_orig_len: Cstruct.t -> int32
 
-  val set_pcap_packet_ts_sec: Cstruct.buf -> int32 -> unit
-  val set_pcap_packet_ts_usec: Cstruct.buf -> int32 -> unit
-  val set_pcap_packet_incl_len: Cstruct.buf -> int32 -> unit
-  val set_pcap_packet_orig_len: Cstruct.buf -> int32 -> unit
+  val set_pcap_packet_ts_sec: Cstruct.t -> int32 -> unit
+  val set_pcap_packet_ts_usec: Cstruct.t -> int32 -> unit
+  val set_pcap_packet_incl_len: Cstruct.t -> int32 -> unit
+  val set_pcap_packet_orig_len: Cstruct.t -> int32 -> unit
 end
 
 let magic_number = 0xa1b2c3d4l
