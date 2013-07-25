@@ -1,6 +1,6 @@
 OASISFormat: 0.3
 Name:        pcap
-Version:     0.3.2
+Version:     0.3.3
 Synopsis:    Pcap tools
 Authors:     Anil Madhavapeddy, Dave Scott
 License:     ISC
@@ -18,7 +18,7 @@ Flag mirage
 Library pcap
   CompiledObject:     best
   Path:               lib
-  Findlibname:        pcap
+  Findlibname:        pcap-format
   Modules:            Pcap
   BuildDepends:       cstruct ( >= 0.5.0 ), cstruct.syntax
 
@@ -29,7 +29,7 @@ Library mirage
   Findlibname:        mirage
   Findlibparent:      pcap
   Modules:            Pcap_mirage, Lwt_bounded_stream
-  BuildDepends:       mirage-net, pcap, lwt, lwt.syntax
+  BuildDepends:       mirage-net, pcap-format, lwt, lwt.syntax
 
 Executable print
   Build$:             flag(unix)
@@ -38,7 +38,7 @@ Executable print
   MainIs:             print.ml
   Custom:             true
   Install:            false
-  BuildDepends:       lwt, lwt.unix, pcap
+  BuildDepends:       lwt, lwt.unix, pcap-format
 
 Executable test
   Path:               lib_test
@@ -47,4 +47,4 @@ Executable test
   Custom:             true
   CompiledObject:     best
   Install:            false
-  BuildDepends:       lwt, lwt.unix, cstruct, pcap, oUnit
+  BuildDepends:       lwt, lwt.unix, cstruct, pcap-format, oUnit
