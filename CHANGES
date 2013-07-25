@@ -1,5 +1,7 @@
-0.3.2 (trunk):
+0.3.3 (25-Jul-2013):
 * Add Lwt_bounded implementation to constrain size of packet captures.
+* Update package name to pcap-format
+* Update to new Cstruct (>= 0.6.0) and Mirage
 
 0.3.1 (Sep 2012): 
 * Support dumping a pcap trace to a block device.

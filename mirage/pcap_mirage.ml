@@ -25,7 +25,7 @@ let capture_limit = 64
 (* We lack a decent file abstraction so we'll experiment with representing
    open files as threads which read commands from an mvar. *)
 
-type fd = Cstruct.buf list option Lwt_mvar.t
+type fd = Cstruct.t list option Lwt_mvar.t
 
 let write fd bufs = Lwt_mvar.put fd (Some bufs)
 
@@ -34,7 +34,7 @@ let open_device blkif : fd =
   let page_offset = ref 0L in
   let buf_offset = ref 0 in
   let closed = ref false in
-  let buf = Io_page.get () in
+  let buf = Cstruct.of_bigarray (Io_page.get 1) in
   let (_: unit Lwt.t) =
     while_lwt not(!closed) do
       Lwt_mvar.take m >>=
@@ -42,18 +42,18 @@ let open_device blkif : fd =
       | None ->
         closed := true;
         return ()
-      | Some (frags: Cstruct.buf list) ->
+      | Some (frags: Cstruct.t list) ->
         let single_write frag =
           let available_space = 4096 - !buf_offset in
           let needed_space = Cstruct.len frag in
           if needed_space >= available_space then begin
-            Cstruct.blit_buffer frag 0 buf !buf_offset available_space;
+            Cstruct.blit frag 0 buf !buf_offset available_space;
             lwt () = blkif#write_page !page_offset buf in
             page_offset := Int64.add !page_offset 4096L;
             buf_offset := 0;
             return available_space
           end else begin
-            Cstruct.blit_buffer frag 0 buf !buf_offset needed_space;
+            Cstruct.blit frag 0 buf !buf_offset needed_space;
             buf_offset := !buf_offset + needed_space;
             return needed_space
           end in
@@ -81,7 +81,8 @@ let start_capture (input: Net.Ethif.t) fd =
       return ()
   );
 
-  let buf = OS.Io_page.get () in
+  let buf = OS.Io_page.get 1 in
+  let buf = Cstruct.of_bigarray buf in
   set_pcap_header_magic_number buf magic_number;
   set_pcap_header_version_major buf major_version;
   set_pcap_header_version_minor buf minor_version;
@@ -97,7 +98,8 @@ let start_capture (input: Net.Ethif.t) fd =
       Lwt_list.iter_s
         (fun (time, frags) ->
           let len = List.fold_left (+) 0 (List.map Cstruct.len frags) in
-          let buf = OS.Io_page.get () in
+          let buf = OS.Io_page.get 1 in
+          let buf = Cstruct.of_bigarray buf in
           set_pcap_packet_ts_sec buf (Int32.(of_float time));
           set_pcap_packet_ts_usec buf (Int32.rem (Int32.of_float ( time *. 1000000.)) 1000000l);
           set_pcap_packet_incl_len buf (Int32.of_int len);

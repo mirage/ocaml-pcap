@@ -119,6 +119,7 @@ let parse filename =
   printf "filename: %s\n" filename;
   let fd = Unix.(openfile filename [O_RDONLY] 0) in
   let buf = Bigarray.(Array1.map_file fd Bigarray.char c_layout false (-1)) in
+  let buf = Cstruct.of_bigarray buf in
   printf "total pcap file length %d\n" (Cstruct.len buf);
 
   let header, body = Cstruct.split buf sizeof_pcap_header in
