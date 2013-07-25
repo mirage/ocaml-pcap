@@ -81,7 +81,8 @@ let start_capture (input: Net.Ethif.t) fd =
       return ()
   );
 
-  let buf = OS.Io_page.get () in
+  let buf = OS.Io_page.get 1 in
+  let buf = Cstruct.of_bigarray buf in
   set_pcap_header_magic_number buf magic_number;
   set_pcap_header_version_major buf major_version;
   set_pcap_header_version_minor buf minor_version;
@@ -97,7 +98,8 @@ let start_capture (input: Net.Ethif.t) fd =
       Lwt_list.iter_s
         (fun (time, frags) ->
           let len = List.fold_left (+) 0 (List.map Cstruct.len frags) in
-          let buf = OS.Io_page.get () in
+          let buf = OS.Io_page.get 1 in
+          let buf = Cstruct.of_bigarray buf in
           set_pcap_packet_ts_sec buf (Int32.(of_float time));
           set_pcap_packet_ts_usec buf (Int32.rem (Int32.of_float ( time *. 1000000.)) 1000000l);
           set_pcap_packet_incl_len buf (Int32.of_int len);
