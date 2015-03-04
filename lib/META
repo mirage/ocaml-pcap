@@ -1,22 +1,12 @@
 # OASIS_START
-# DO NOT EDIT (digest: d410c2e1384a134e6b7efbe21857bf28)
-version = "0.3.3"
-description = "Pcap tools"
-requires = "cstruct cstruct.syntax"
-archive(byte) = "pcap.cma"
-archive(byte, plugin) = "pcap.cma"
-archive(native) = "pcap.cmxa"
-archive(native, plugin) = "pcap.cmxs"
-exists_if = "pcap.cma"
-package "mirage" (
- version = "0.3.3"
- description = "Pcap tools"
- requires = "mirage-net pcap-format lwt lwt.syntax"
- archive(byte) = "mirage.cma"
- archive(byte, plugin) = "mirage.cma"
- archive(native) = "mirage.cmxa"
- archive(native, plugin) = "mirage.cmxs"
- exists_if = "mirage.cma"
-)
+# DO NOT EDIT (digest: 5ee3928d666aaa86d940999f756be50f)
+version = "0.4"
+description = "Packet capture tools"
+requires = "cstruct cstruct.syntax ipaddr"
+archive(byte) = "pcap-format.cma"
+archive(byte, plugin) = "pcap-format.cma"
+archive(native) = "pcap-format.cmxa"
+archive(native, plugin) = "pcap-format.cmxs"
+exists_if = "pcap-format.cma"
 # OASIS_STOP
 
