@@ -44,3 +44,17 @@ Executable test
   CompiledObject: best
   Install: false
   BuildDepends: lwt, lwt.unix, cstruct, pcap-format, oUnit
+
+Library "pcap-format.unix"
+  CompiledObject: best
+  Path: unix
+  Install: true
+  Modules: Trace
+  BuildDepends: cstruct ( >= 0.5.0 ), pcap-format
+
+Executable "ocap"
+  CompiledObject: best
+  Path: unix
+  Install: true
+  MainIs: ocap_cmd.ml
+  BuildDepends: pcap-format, pcap-format.unix, cmdliner
