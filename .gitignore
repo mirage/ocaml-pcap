@@ -1,3 +1,5 @@
 _build
 .*.swp
 setup.data
+/setup.log
+/ocap_cmd.native

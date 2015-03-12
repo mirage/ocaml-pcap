@@ -1,38 +1,45 @@
-all: build
+-include Makefile.config
 
-NAME=pcap
-J=4
+# OASIS_START
+# DO NOT EDIT (digest: a3c674b4239234cbbe53afe090018954)
 
-UNIX ?= $(shell if ocamlfind query lwt.unix >/dev/null 2>&1; then echo --enable-unix; fi)
-MIRAGE ?= $(shell if ocamlfind query mirage-net >/dev/null 2>&1; then echo --enable-mirage; fi)
-TESTS ?= $(shell if ocamlfind query oUnit >/dev/null && ocamlfind query lwt.unix >/dev/null 2>&1; then echo --enable-tests; fi)
+SETUP = ocaml setup.ml
 
-setup.ml: _oasis
-	oasis setup
+build: setup.data
+	$(SETUP) -build $(BUILDFLAGS)
 
-setup.data: setup.ml
-	ocaml setup.ml -configure $(UNIX) $(MIRAGE) $(TESTS)
+doc: setup.data build
+	$(SETUP) -doc $(DOCFLAGS)
 
-build: setup.data setup.ml
-	ocaml setup.ml -build -j $(J)
+test: setup.data build
+	$(SETUP) -test $(TESTFLAGS)
 
-doc: setup.data setup.ml
-	ocaml setup.ml -doc -j $(J)
+all:
+	$(SETUP) -all $(ALLFLAGS)
 
-install: setup.data setup.ml
-	ocaml setup.ml -install
+install: setup.data
+	$(SETUP) -install $(INSTALLFLAGS)
 
-# XXX: this isn't running the test for some reason
-#test: setup.ml build
-#	ocaml setup.ml -test
-.PHONY:test
-test:
-	./_build/lib_test/test.native
+uninstall: setup.data
+	$(SETUP) -uninstall $(UNINSTALLFLAGS)
 
-reinstall: setup.ml
-	ocamlfind remove $(NAME) || true
-	ocaml setup.ml -reinstall
+reinstall: setup.data
+	$(SETUP) -reinstall $(REINSTALLFLAGS)
 
 clean:
-	ocamlbuild -clean
-	rm -f setup.data setup.log
+	$(SETUP) -clean $(CLEANFLAGS)
+
+distclean:
+	$(SETUP) -distclean $(DISTCLEANFLAGS)
+
+setup.data:
+	$(SETUP) -configure $(CONFIGUREFLAGS)
+
+configure:
+	$(SETUP) -configure $(CONFIGUREFLAGS)
+
+.PHONY: build doc test all install uninstall reinstall clean distclean configure
+
+# OASIS_STOP
+
+-include Makefile.local

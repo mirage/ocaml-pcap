@@ -1,50 +1,60 @@
-OASISFormat: 0.3
-Name:        pcap
-Version:     0.3.3
-Synopsis:    Pcap tools
-Authors:     Anil Madhavapeddy, Dave Scott
+OASISFormat: 0.4
+Name:        pcap-format
+Version:     0.4
+Synopsis:    Packet capture tools
+Authors:     Richard Mortier, Richard Clegg, Anil Madhavapeddy, Dave Scott
 License:     ISC
-Plugins:     META (0.2)
+Plugins:     META (0.4), DevFiles (0.4)
 BuildTools:  ocamlbuild
 
 Flag unix
-  Description: build the Unix binary
+  Description: build Unix targets
   Default: false
 
 Flag mirage
-  Description: build the mirage library
+  Description: build Mirage targets
   Default: false
 
-Library pcap
-  CompiledObject:     best
-  Path:               lib
-  Findlibname:        pcap-format
-  Modules:            Pcap
-  BuildDepends:       cstruct ( >= 0.5.0 ), cstruct.syntax
+Library "pcap-format"
+  CompiledObject: best
+  Path: lib/
+  Install: true
+  FindlibName: pcap-format
+  Modules:
+    Ocap, Seq, Buf, Packet, Demux,
+    Pcap, Erf,
+    Ethernet, Arp, Icmp, Ip4, Udp4, Tcp4, Dhcp4
+  BuildDepends: cstruct ( >= 0.5.0 ), cstruct.syntax, ipaddr
 
-Library mirage
-  Build$:             flag(mirage)
-  CompiledObject:     best
-  Path:               mirage
-  Findlibname:        mirage
-  Findlibparent:      pcap
-  Modules:            Pcap_mirage, Lwt_bounded_stream
-  BuildDepends:       mirage-net, pcap-format, lwt, lwt.syntax
-
-Executable print
-  Build$:             flag(unix)
-  CompiledObject:     best
-  Path:               print
-  MainIs:             print.ml
-  Custom:             true
-  Install:            false
-  BuildDepends:       lwt, lwt.unix, pcap-format
+Document "pcap-format"
+  Title: PCAP-format docs
+  Type: ocamlbuild (0.3)
+  BuildTools+: ocamldoc
+  XOCamlbuildPath: lib/
+  XOCamlbuildModules:
+    Ocap, Seq, Buf, Packet, Demux,
+    Pcap, Erf,
+    Ethernet, Arp, Icmp, Ip4, Udp4, Tcp4, Dhcp4
 
 Executable test
-  Path:               lib_test
-  MainIs:             test.ml
-  Build$:             flag(tests)
-  Custom:             true
-  CompiledObject:     best
-  Install:            false
-  BuildDepends:       lwt, lwt.unix, cstruct, pcap-format, oUnit
+  Path: lib_test
+  MainIs: test.ml
+  Build$: flag(tests)
+  Custom: true
+  CompiledObject: best
+  Install: false
+  BuildDepends: lwt, lwt.unix, cstruct, pcap-format, oUnit
+
+Library "pcap-format.unix"
+  CompiledObject: best
+  Path: unix
+  Install: true
+  Modules: Trace
+  BuildDepends: cstruct ( >= 0.5.0 ), pcap-format
+
+Executable "ocap"
+  CompiledObject: best
+  Path: unix
+  Install: true
+  MainIs: ocap_cmd.ml
+  BuildDepends: pcap-format, pcap-format.unix, cmdliner

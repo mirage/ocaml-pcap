@@ -1,0 +1,11 @@
+.PHONY: setup-clean setup reinstall
+
+setup-clean: distclean
+	$(RM) Makefile.bak
+	oasis setup-clean
+	$(RM) setup.ml
+
+setup.ml: _oasis
+	oasis setup
+
+setup: setup.ml setup.data
