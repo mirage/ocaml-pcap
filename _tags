@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 4f4eb672d9ed04e5d94bafcc47ee9a17)
+# DO NOT EDIT (digest: 8f2295edab408e374bf5bb8be8a96cf4)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -17,18 +17,18 @@ true: annot, bin_annot
 # Library pcap-format
 "lib/pcap-format.cmxs": use_pcap-format
 <lib/*.ml{,i,y}>: pkg_cstruct
-<lib/*.ml{,i,y}>: pkg_cstruct.syntax
+<lib/*.ml{,i,y}>: pkg_cstruct.ppx
 <lib/*.ml{,i,y}>: pkg_ipaddr
 # Executable test
 <lib_test/test.{native,byte}>: pkg_cstruct
-<lib_test/test.{native,byte}>: pkg_cstruct.syntax
+<lib_test/test.{native,byte}>: pkg_cstruct.ppx
 <lib_test/test.{native,byte}>: pkg_ipaddr
 <lib_test/test.{native,byte}>: pkg_lwt
 <lib_test/test.{native,byte}>: pkg_lwt.unix
 <lib_test/test.{native,byte}>: pkg_oUnit
 <lib_test/test.{native,byte}>: use_pcap-format
 <lib_test/*.ml{,i,y}>: pkg_cstruct
-<lib_test/*.ml{,i,y}>: pkg_cstruct.syntax
+<lib_test/*.ml{,i,y}>: pkg_cstruct.ppx
 <lib_test/*.ml{,i,y}>: pkg_ipaddr
 <lib_test/*.ml{,i,y}>: pkg_lwt
 <lib_test/*.ml{,i,y}>: pkg_lwt.unix
@@ -40,17 +40,15 @@ true: annot, bin_annot
 # Executable ocap
 <unix/ocap_cmd.{native,byte}>: pkg_cmdliner
 <unix/ocap_cmd.{native,byte}>: pkg_cstruct
-<unix/ocap_cmd.{native,byte}>: pkg_cstruct.syntax
+<unix/ocap_cmd.{native,byte}>: pkg_cstruct.ppx
 <unix/ocap_cmd.{native,byte}>: pkg_ipaddr
 <unix/ocap_cmd.{native,byte}>: use_pcap-format
 <unix/ocap_cmd.{native,byte}>: use_pcap-format.unix
 <unix/*.ml{,i,y}>: pkg_cmdliner
 <unix/*.ml{,i,y}>: pkg_cstruct
-<unix/*.ml{,i,y}>: pkg_cstruct.syntax
+<unix/*.ml{,i,y}>: pkg_cstruct.ppx
 <unix/*.ml{,i,y}>: pkg_ipaddr
 <unix/*.ml{,i,y}>: use_pcap-format
 <unix/*.ml{,i,y}>: use_pcap-format.unix
 # OASIS_STOP
-<**/*.ml{,i}>: syntax_camlp4o, pkg_camlp4
 true: annot
-
