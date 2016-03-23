@@ -16,12 +16,13 @@
 
 open Printf
 
-cstruct udp4 {
-  uint16_t srcpt;
-  uint16_t dstpt;
-  uint16_t len;
-  uint16_t xsum
-} as big_endian
+[%%cstruct
+type udp4 = {
+  srcpt: uint16_t;
+  dstpt: uint16_t;
+  len:   uint16_t;
+  xsum:  uint16_t;
+} [@@big_endian]]
 
 type h = {
   srcpt: int;

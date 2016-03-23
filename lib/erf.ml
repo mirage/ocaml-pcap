@@ -62,18 +62,20 @@ module Flags = struct
 
 end
 
-cstruct erf_ts {
-  uint64_t ts;
-} as little_endian
+[%%cstruct
+type erf_ts = {
+  ts: uint64_t;
+} [@@little_endian]]
 
-cstruct erf_packet {
-  uint8_t typ;
-  uint8_t flags;
-  uint16_t rlen;
-  uint16_t lctr;
-  uint16_t wlen;
-  uint16_t chaff (* assumes ERF:ETH (typ=0x02) *)
-} as big_endian
+[%%cstruct
+type erf_packet = {
+  typ:   uint8_t;
+  flags: uint8_t;
+  rlen:  uint16_t;
+  lctr:  uint16_t;
+  wlen:  uint16_t;
+  chaff: uint16_t; (* assumes ERF:ETH (typ=0x02) *)
+} [@@big_endian]]
 
 type h = {
   usecs: int64;
