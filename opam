@@ -11,8 +11,10 @@ tags: [
   "org:xapi-project"
 ]
 build: [
-  ["./configure" "--bindir=%{bin}%"]
+  ["./configure" "--prefix" prefix]
   [make]
+]
+install: [
   [make "install"]
 ]
 remove: [["ocamlfind" "remove" "pcap-format"]]
