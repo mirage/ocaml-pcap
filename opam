@@ -21,8 +21,10 @@ remove: [["ocamlfind" "remove" "pcap-format"]]
 depends: [
   "ocamlfind"
   "cstruct" {>= "0.6.0"}
-  "lwt" {>= "2.4.0"}
+  "lwt" {test & >= "2.4.0"}
+  "ipaddr"
   "ocamlbuild" {build}
+  "type_conv" {build}
 ]
 depopts: ["mirage-net"]
 conflicts: [
