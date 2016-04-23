@@ -18,49 +18,52 @@ open Printf
 open Ipaddr
 open Cstruct
 
-cenum protocol {
-  ICMP =   1;
-  TCP  =   6;
-  UDP  =  17;
-  GRE  =  47;
-  ESP  =  50;
-  AH   =  51;
-  OSPF =  89
-} as uint8_t
+[%%cenum
+type protocol =
+  | ICMP [@id  1]
+  | TCP  [@id   6]
+  | UDP  [@id  17]
+  | GRE  [@id  47]
+  | ESP  [@id 50]
+  | AH   [@id  51]
+  | OSPF [@id  89]
+[@@uint8_t]]
 
-cenum port {
-  DNS      =    53;
-  BOOTPS   =    67;
-  BOOTPC   =    68;
-  HTTP     =    80;
-  EPM      =   135;
-  NBNS     =   137;
-  NBSS     =   139;
-  BGP      =   179;
-  SMB      =   445;
-  RTSP     =   554;
-  RWS      =  1745;
-  MSN      =  1863;
-  XMPP_CLT =  5222;
-  XMPP_SVR =  5269
-} as uint16_t
+[%%cenum
+type port =
+  | DNS      [@id 53]
+  | BOOTPS   [@id 67]
+  | BOOTPC   [@id 68]
+  | HTTP     [@id 80]
+  | EPM      [@id 135]
+  | NBNS     [@id 137]
+  | NBSS     [@id 139]
+  | BGP      [@id 179]
+  | SMB      [@id 445]
+  | RTSP     [@id 554]
+  | RWS      [@id 1745]
+  | MSN      [@id 1863]
+  | XMPP_CLT [@id 5222]
+  | XMPP_SVR [@id 5269]
+[@@uint16_t]]
 
 let is_wellknown_port p  = ((    0 <= p) && (p <=  1023))
 let is_registered_port p = (( 1024 <= p) && (p <= 49151))
 let is_ephemeral_port p  = ((49152 <= p) && (p <= 65535))
 
-cstruct ip4 {
-  uint8_t  verhlen;
-  uint8_t  tos;
-  uint16_t len;
-  uint16_t id;
-  uint16_t flagoff;
-  uint8_t  ttl;
-  uint8_t  proto;
-  uint16_t xsum;
-  uint32_t src;
-  uint32_t dst
-} as big_endian
+[%%cstruct
+type ip4 = {
+  verhlen: uint8_t;
+  tos:     uint8_t;
+  len:     uint16_t;
+  id:      uint16_t;
+  flagoff: uint16_t;
+  ttl:     uint8_t;
+  proto:   uint8_t;
+  xsum:    uint16_t;
+  src:     uint32_t;
+  dst:     uint32_t;
+} [@@big_endian]]
 
 let get_ip4_ver  buf = (get_ip4_verhlen buf) lsr 4
 let get_ip4_hlen buf = ((get_ip4_verhlen buf) land 0x0f) * 4

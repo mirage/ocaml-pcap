@@ -18,43 +18,47 @@ open Printf
 
 type bytes = Cstruct.t
 
-cenum typ {
-  ECHO_REPLY  =  0;
-  DSTUNREACH  =  3;
-  SRC_QUENCH  =  4;
-  REDIRECT    =  5;
-  ECHO        =  8;
-  RTR_SOLICIT = 10;
-  TIME_EXCEEDED   = 11;
-  PARAM_PROBLEM   = 12;
-  TIMESTAMP       = 13;
-  TIMESTAMP_REPLY = 14;
-  INFO_REQUEST    = 15;
-  INFO_REPLY      = 16
-} as uint8_t
+[%%cenum
+type typ =
+  | ECHO_REPLY      [@id 0]
+  | DSTUNREACH      [@id 3]
+  | SRC_QUENCH      [@id 4]
+  | REDIRECT        [@id  5]
+  | ECHO            [@id  8]
+  | RTR_SOLICIT     [@id 10]
+  | TIME_EXCEEDED   [@id  11]
+  | PARAM_PROBLEM   [@id  12]
+  | TIMESTAMP       [@id  13]
+  | TIMESTAMP_REPLY [@id  14]
+  | INFO_REQUEST    [@id  15]
+  | INFO_REPLY      [@id 16]
+[@@uint8_t]]
 
-cenum redirect_code {
-  NET      = 0;
-  HOST     = 1;
-  TOS_NET  = 2;
-  TOS_HOST = 3
-} as uint8_t
+[%%cenum
+type redirect_code =
+  | NET      [@id  0]
+  | HOST     [@id  1]
+  | TOS_NET  [@id  2]
+  | TOS_HOST [@id 3]
+[@@uint8_t]]
 
-cenum dstunreach_code {
-  NET         =  0;
-  HOST        =  1;
-  PROTO       =  2;
-  PORT        =  3;
-  FRAGREQ     =  4;
-  SRCRTFAIL   =  5;
-  ADMINPROHIB = 10
-} as uint8_t
+[%%cenum
+type dstunreach_code =
+  | NET         [@id   0]
+  | HOST        [@id   1]
+  | PROTO       [@id   2]
+  | PORT        [@id   3]
+  | FRAGREQ     [@id   4]
+  | SRCRTFAIL   [@id   5]
+  | ADMINPROHIB [@id 10]
+[@@uint8_t]]
 
-cstruct icmp {
-  uint8_t typ;
-  uint8_t code;
-  uint16_t xsum
-} as big_endian
+[%%cstruct
+type icmp = {
+  typ:  uint8_t;
+  code: uint8_t;
+  xsum: uint16_t;
+} [@@big_endian]]
 
 type h = {
   typ: int;

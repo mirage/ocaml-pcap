@@ -16,16 +16,17 @@
 
 open Printf
 
-cstruct tcp4 {
-  uint16_t srcpt;
-  uint16_t dstpt;
-  uint32_t seqno;
-  uint32_t ackno;
-  uint16_t flagoff;
-  uint16_t window;
-  uint16_t xsum;
-  uint16_t urgent
-} as big_endian
+[%%cstruct
+type tcp4 = {
+  srcpt:   uint16_t;
+  dstpt:   uint16_t;
+  seqno:   uint32_t;
+  ackno:   uint32_t;
+  flagoff: uint16_t;
+  window:  uint16_t;
+  xsum:    uint16_t;
+  urgent:  uint16_t;
+} [@@big_endian]]
 
 type h = {
   srcpt: int;

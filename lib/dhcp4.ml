@@ -16,24 +16,25 @@
 
 open Printf
 
-cstruct dhcp4 {
-  uint8_t  op;
-  uint8_t  htype;
-  uint8_t  hlen;
-  uint8_t  hops;
-  uint32_t xid;
-  uint16_t secs;
-  uint16_t flags;
+[%%cstruct
+type dhcp4 = {
+  op:     uint8_t;
+  htype:  uint8_t;
+  hlen:   uint8_t;
+  hops:   uint8_t;
+  xid:    uint32_t;
+  secs:   uint16_t;
+  flags:  uint16_t;
 
-  uint32_t ciaddr;
-  uint32_t yiaddr;
-  uint32_t siaddr;
-  uint32_t giaddr;
+  ciaddr: uint32_t;
+  yiaddr: uint32_t;
+  siaddr: uint32_t;
+  giaddr: uint32_t;
 
-  uint8_t chaddr[16];
-  uint8_t sname[64];
-  uint8_t file[128]
-} as big_endian
+  chaddr: uint8_t [@len 16];
+  sname:  uint8_t [@len 64];
+  file:   uint8_t [@len 128];
+} [@@big_endian]]
 
 type h = {
   op: int;
