@@ -19,19 +19,21 @@ open Cstruct
 
 type bytes = Cstruct.t
 
-cenum ethertype {
-  IP4 = 0x0800;
-  ARP = 0x0806;
-  IPX = 0x8137;
-  VLAN = 0x8100;
-  IP6 = 0x86dd
-} as uint16_t
+[%%cenum
+type ethertype =
+  | IP4  [@id 0x0800]
+  | ARP  [@id 0x0806]
+  | IPX  [@id 0x8137]
+  | VLAN [@id 0x8100]
+  | IP6  [@id 0x86dd]
+[@@uint16_t]]
 
-cstruct ethernet {
-  uint8_t dst[6];
-  uint8_t src[6];
-  uint16_t ethertype
-} as big_endian
+[%%cstruct
+type ethernet = {
+  dst: uint8_t [@len 6];
+  src: uint8_t [@len 6];
+  ethertype: uint16_t;
+} [@@big_endian]]
 
 type h = {
   dst: bytes;
@@ -66,10 +68,11 @@ let to_string h =
     (mac_to_string h.src) (mac_to_string h.dst) ethertype
 
 module Vlan = struct
-  cstruct vlan {
-      uint16_t tci;
-      uint16_t ethertype
-  } as big_endian
+  [%%cstruct
+  type vlan = {
+      tci: uint16_t;
+      ethertype: uint16_t;
+  } [@@big_endian]]
 
   type h = {
     tci: uint16;

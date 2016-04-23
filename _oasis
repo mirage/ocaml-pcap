@@ -24,7 +24,7 @@ Library "pcap-format"
     Ocap, Seq, Buf, Packet, Demux,
     Pcap, Erf,
     Ethernet, Arp, Icmp, Ip4, Udp4, Tcp4, Dhcp4
-  BuildDepends: cstruct ( >= 0.5.0 ), cstruct.syntax, ipaddr
+  BuildDepends: cstruct ( >= 0.5.0 ), cstruct.ppx, ipaddr
 
 Document "pcap-format"
   Title: PCAP-format docs

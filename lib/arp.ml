@@ -18,28 +18,31 @@ open Printf
 
 type bytes = Cstruct.t
 
-cenum op {
-  REQUEST = 1;
-  RESPONSE = 2
-} as uint8_t
+[%%cenum
+type op =
+  | REQUEST  [@id 1]
+  | RESPONSE [@id 2]
+[@@uint8_t]]
 
-cenum hw {
-  ETHERNET = 1;
-  HW_802_11 = 6; (* XXX spurious leading HW_ required by cstruct syntax *)
-  ARCNET = 7
-} as uint16_t
+[%%cenum
+type hw =
+  | ETHERNET  [@id 1]
+  | HW_802_11 [@id 6] (* XXX spurious leading HW_ required by cstruct syntax *)
+  | ARCNET    [@id 7]
+[@@uint16_t]]
 
-cstruct arp {
-  uint16_t hw;
-  uint16_t pro;
-  uint8_t hlen;
-  uint8_t plen;
-  uint16_t op;
-  uint8_t shaddr[6];
-  uint32_t spaddr;
-  uint8_t dhaddr[6];
-  uint32_t dpaddr
-} as big_endian
+[%%cstruct
+type arp = {
+  hw:     uint16_t;
+  pro:    uint16_t;
+  hlen:   uint8_t;
+  plen:   uint8_t;
+  op:     uint16_t;
+  shaddr: uint8_t  [@len 6];
+  spaddr: uint32_t;
+  dhaddr: uint8_t  [@len 6];
+  dpaddr: uint32_t;
+} [@@big_endian]]
 
 type h = {
   hw: int;
