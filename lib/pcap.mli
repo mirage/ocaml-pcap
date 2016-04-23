@@ -183,6 +183,8 @@ val to_string: h -> string
     bytes {! Cstruct.t} for error reporting. *)
 type t = PCAP of h * Packet.t * Cstruct.t
 
+val detect: Cstruct.t -> (module HDR) option
+
 val iter: Cstruct.t -> (Cstruct.t -> Packet.t) -> (fh * t Cstruct.iter) option
 
 val to_pkt: t -> Ocap.t

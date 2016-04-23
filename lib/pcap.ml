@@ -178,15 +178,15 @@ let to_string h =
 
 type t = PCAP of h * Packet.t * Cstruct.t
 
+let detect buf =
+  let le_magic = LE.get_pcap_header_magic_number buf in
+  let be_magic = BE.get_pcap_header_magic_number buf in
+  if le_magic = magic_number then Some (module LE: HDR)
+  else if be_magic = magic_number then Some (module BE: HDR)
+  else None
+
 let iter buf demuxf =
-  let pcap_hdr =
-    let le_magic = LE.get_pcap_header_magic_number buf in
-    let be_magic = BE.get_pcap_header_magic_number buf in
-    if le_magic = magic_number then Some (module LE: HDR)
-    else if be_magic = magic_number then Some (module BE: HDR)
-    else None
-  in
-  match pcap_hdr with
+  match detect buf with
   | None -> None
   | Some h ->
     let module H = (val h : HDR) in
