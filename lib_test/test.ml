@@ -32,7 +32,7 @@ let read_header filename =
   match Pcap.detect buf with
   | Some h -> h, buf
   | None ->
-	  failwith (Printf.sprintf "failed to parse pcap header from %s" filename)
+     failwith (Printf.sprintf "failed to parse pcap header from %s" filename)
 
 let header () =
   let h, buf = read_header example_file in
@@ -55,13 +55,13 @@ let packets () =
 let _ =
   let verbose = ref false in
   Arg.parse [
-    "-verbose", Arg.Unit (fun _ -> verbose := true), "Run in verbose mode";
-  ] (fun x -> Printf.fprintf stderr "Ignoring argument: %s" x)
-    "Test pcap parsing code";
+      "-verbose", Arg.Unit (fun _ -> verbose := true), "Run in verbose mode";
+    ] (fun x -> Printf.fprintf stderr "Ignoring argument: %s" x)
+            "Test pcap parsing code";
 
   let suite = "pcap" >:::
-    [
-      "header" >:: header;
-      "packets" >:: packets;
-    ] in
+                [
+                  "header" >:: header;
+                  "packets" >:: packets;
+                ] in
   run_test_tt ~verbose:!verbose suite
