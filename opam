@@ -1,6 +1,6 @@
 opam-version: "1.2"
 maintainer: "dave@recoil.org"
-authors: [ "Richard Mortier" "Richard Clegg" "Anil Madhavapeddy" "Dave Scott" ]
+authors: [ "Anil Madhavapeddy" "Dave Scott" "Richard Mortier" ]
 license: "ISC"
 version: "0.5"
 homepage: "https://github.com/mirage/ocaml-pcap"
