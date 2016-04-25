@@ -2,7 +2,7 @@ OASISFormat: 0.4
 Name:        pcap-format
 Version:     0.3.4
 Synopsis:    PCAP tools
-Authors:     Anil Madhavapeddy, Dave Scott, Richard Mortier
+Authors:     Anil Madhavapeddy, Dave Scott, Richard Mortier, Richard Clegg
 License:     ISC
 BuildTools:  ocamlbuild
 
