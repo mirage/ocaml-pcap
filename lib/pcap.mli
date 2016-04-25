@@ -101,7 +101,7 @@ module BE : sig
         orig_len: uint32_t      (* actual length of packet *)
       } [@@big_endian]
   ]
-  
+
 end
 
 module type HDR = sig

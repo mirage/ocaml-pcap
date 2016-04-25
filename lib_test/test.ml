@@ -15,9 +15,6 @@
 open Pcap
 open OUnit
 
-let ( |> ) a b = b a
-let id x = x
-
 let example_file = "lib_test/dhcp.pcap"
 
 (* Note this will leak fds and memory *)
@@ -32,7 +29,7 @@ let read_header filename =
   match Pcap.detect buf with
   | Some h -> h, buf
   | None ->
-	  failwith (Printf.sprintf "failed to parse pcap header from %s" filename)
+    failwith (Printf.sprintf "failed to parse pcap header from %s" filename)
 
 let header () =
   let h, buf = read_header example_file in
@@ -60,8 +57,8 @@ let _ =
     "Test pcap parsing code";
 
   let suite = "pcap" >:::
-    [
-      "header" >:: header;
-      "packets" >:: packets;
-    ] in
+              [
+                "header" >:: header;
+                "packets" >:: packets;
+              ] in
   run_test_tt ~verbose:!verbose suite
