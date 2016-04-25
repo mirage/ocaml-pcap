@@ -7,9 +7,7 @@ License:     ISC
 BuildTools:  ocamlbuild
 
 AlphaFeatures: ocamlbuild_more_args, pure_interface
-
 Plugins: META (0.4), DevFiles (0.4)
-XDevFilesEnableConfigure: false
 
 Flag unix
   Description: build the Unix targets
