@@ -1,0 +1,5 @@
+PKG lwt cstruct cstruct.ppx pcap-format
+S ./lib
+S ./mirage
+B _build/lib
+B _build/mirage
