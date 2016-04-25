@@ -1,6 +1,7 @@
 (*
  * Copyright (c) 2012 Anil Madhavapeddy <anil@recoil.org>
  * Copyright (C) 2012 Citrix Systems Inc
+ * Copyright (C) 2013 Richard Mortier <mort@cantab.net>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -22,14 +23,13 @@ let minor_version = 4
 type endian = | Big | Little
 
 let string_of_endian = function
-| Big    -> "big"
-| Little -> "little"
+  | Big    -> "big"
+  | Little -> "little"
 
 (* The pcap format allows the writer to use either big- or little- endian,
-   depending on which is most convenient (higher performance). We are able
-   to read both, but we haven't optimised the low-level set_* functions
-   enough to make it worthwhile to bother detecting native endian-ness and
-   switching. *)
+   depending on which is most convenient (higher performance). We are able to
+   read both, but we haven't optimised the low-level set_* functions enough to
+   make it worthwhile to bother detecting native endian-ness and switching. *)
 
 module Network = struct
 
@@ -38,8 +38,8 @@ module Network = struct
     | Ieee80211
 
   let t_to_int32 = [
-      Ethernet,  1l
-    ; Ieee80211, 105l
+    Ethernet,  1l
+  ; Ieee80211, 105l
   ]
 
   let int32_to_t = List.map (fun (x, y) -> y, x) t_to_int32
@@ -57,44 +57,52 @@ end
 module LE = struct
   let endian = Little
 
-  cstruct pcap_header {
-    uint32_t magic_number;   (* magic number *)
-    uint16_t version_major;  (* major version number *)
-    uint16_t version_minor;  (* minor version number *)
-    uint32_t thiszone;       (* GMT to local correction *)
-    uint32_t sigfigs;        (* accuracy of timestamps *)
-    uint32_t snaplen;        (* max length of captured packets, in octets *)
-    uint32_t network         (* data link type *)
-  } as little_endian
+  [%%cstruct
+      type pcap_header = {
+        magic_number: uint32_t;  (* magic number *)
+        version_major: uint16_t; (* major version number *)
+        version_minor: uint16_t; (* minor version number *)
+        thiszone: uint32_t;      (* GMT to local correction *)
+        sigfigs: uint32_t;       (* accuracy of timestamps *)
+        snaplen: uint32_t;       (* max length of captured packets, octets *)
+        network: uint32_t        (* data link type *)
+      } [@@little_endian]
+  ]
 
-  cstruct pcap_packet {
-    uint32_t ts_sec;         (* timestamp seconds *)
-    uint32_t ts_usec;        (* timestamp microseconds *)
-    uint32_t incl_len;       (* number of octets of packet saved in file *)
-    uint32_t orig_len        (* actual length of packet *)
-  } as little_endian
+  [%%cstruct
+      type pcap_packet = {
+        ts_sec: uint32_t;       (* timestamp seconds *)
+        ts_usec: uint32_t;      (* timestamp microseconds *)
+        incl_len: uint32_t;     (* number of octets of packet saved in file *)
+        orig_len: uint32_t      (* actual length of packet *)
+      } [@@little_endian]
+  ]
 
 end
 
 module BE = struct
   let endian = Big
 
-  cstruct pcap_header {
-    uint32_t magic_number;   (* magic number *)
-    uint16_t version_major;  (* major version number *)
-    uint16_t version_minor;  (* minor version number *)
-    uint32_t thiszone;       (* GMT to local correction *)
-    uint32_t sigfigs;        (* accuracy of timestamps *)
-    uint32_t snaplen;        (* max length of captured packets, in octets *)
-    uint32_t network         (* data link type *)
-  } as big_endian
+  [%%cstruct
+      type pcap_header = {
+        magic_number: uint32_t;  (* magic number *)
+        version_major: uint16_t; (* major version number *)
+        version_minor: uint16_t; (* minor version number *)
+        thiszone: uint32_t;      (* GMT to local correction *)
+        sigfigs: uint32_t;       (* accuracy of timestamps *)
+        snaplen: uint32_t;       (* max length of captured packets, octets *)
+        network: uint32_t        (* data link type *)
+      } [@@big_endian]
+  ]
 
-  cstruct pcap_packet {
-    uint32_t ts_sec;         (* timestamp seconds *)
-    uint32_t ts_usec;        (* timestamp microseconds *)
-    uint32_t incl_len;       (* number of octets of packet saved in file *)
-    uint32_t orig_len        (* actual length of packet *)
-  } as big_endian
+  [%%cstruct
+      type pcap_packet = {
+        ts_sec: uint32_t;       (* timestamp seconds *)
+        ts_usec: uint32_t;      (* timestamp microseconds *)
+        incl_len: uint32_t;     (* number of octets of packet saved in file *)
+        orig_len: uint32_t      (* actual length of packet *)
+      } [@@big_endian]
+  ]
 end
 
 let sizeof_pcap_header = BE.sizeof_pcap_header (* = LE.sizeof_pcap_header *)
@@ -142,7 +150,9 @@ let detect buf =
 
 let packets h =
   let module H = (val h : HDR) in
-  Cstruct.iter 
-    (fun buf -> Some (sizeof_pcap_packet + (Int32.to_int (H.get_pcap_packet_incl_len buf))))
+  Cstruct.iter
+    (fun buf ->
+       let len = Int32.to_int (H.get_pcap_packet_incl_len buf) in
+       Some (sizeof_pcap_packet + len)
+    )
     (fun buf -> buf, (Cstruct.shift buf sizeof_pcap_packet))
-

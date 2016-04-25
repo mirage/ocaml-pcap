@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 26ff8ea59043f4a25063712b3259441a)
+# DO NOT EDIT (digest: 62ecd45f4b52a29065996d7bad3458cd)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -17,35 +17,34 @@ true: annot, bin_annot
 # Library pcap
 "lib/pcap.cmxs": use_pcap
 <lib/*.ml{,i,y}>: pkg_cstruct
-<lib/*.ml{,i,y}>: pkg_cstruct.syntax
+<lib/*.ml{,i,y}>: pkg_cstruct.ppx
 # Library mirage
 "mirage/mirage.cmxs": use_mirage
 <mirage/*.ml{,i,y}>: pkg_cstruct
-<mirage/*.ml{,i,y}>: pkg_cstruct.syntax
+<mirage/*.ml{,i,y}>: pkg_cstruct.ppx
 <mirage/*.ml{,i,y}>: pkg_lwt
-<mirage/*.ml{,i,y}>: pkg_lwt.syntax
 <mirage/*.ml{,i,y}>: use_pcap
 # Executable print
 <print/print.{native,byte}>: pkg_cstruct
-<print/print.{native,byte}>: pkg_cstruct.syntax
+<print/print.{native,byte}>: pkg_cstruct.ppx
 <print/print.{native,byte}>: pkg_lwt
 <print/print.{native,byte}>: pkg_lwt.unix
 <print/print.{native,byte}>: use_pcap
 <print/*.ml{,i,y}>: pkg_cstruct
-<print/*.ml{,i,y}>: pkg_cstruct.syntax
+<print/*.ml{,i,y}>: pkg_cstruct.ppx
 <print/*.ml{,i,y}>: pkg_lwt
 <print/*.ml{,i,y}>: pkg_lwt.unix
 <print/*.ml{,i,y}>: use_pcap
 <print/print.{native,byte}>: custom
 # Executable test
 <lib_test/test.{native,byte}>: pkg_cstruct
-<lib_test/test.{native,byte}>: pkg_cstruct.syntax
+<lib_test/test.{native,byte}>: pkg_cstruct.ppx
 <lib_test/test.{native,byte}>: pkg_lwt
 <lib_test/test.{native,byte}>: pkg_lwt.unix
 <lib_test/test.{native,byte}>: pkg_oUnit
 <lib_test/test.{native,byte}>: use_pcap
 <lib_test/*.ml{,i,y}>: pkg_cstruct
-<lib_test/*.ml{,i,y}>: pkg_cstruct.syntax
+<lib_test/*.ml{,i,y}>: pkg_cstruct.ppx
 <lib_test/*.ml{,i,y}>: pkg_lwt
 <lib_test/*.ml{,i,y}>: pkg_lwt.unix
 <lib_test/*.ml{,i,y}>: pkg_oUnit

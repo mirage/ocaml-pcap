@@ -1,6 +1,7 @@
 (*
  * Copyright (c) 2012 Anil Madhavapeddy <anil@recoil.org>
  * Copyright (C) 2012 Citrix Systems Inc
+ * Copyright (C) 2013 Richard Mortier <mort@cantab.net>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -22,8 +23,8 @@ val minor_version: int
 (** Minor version of the pcap format which we understand *)
 
 type endian =
-| Big     (** Big endian (pcap headers) *)
-| Little  (** Little endian (pcap headers) *)
+  | Big     (** Big endian (pcap headers) *)
+  | Little  (** Little endian (pcap headers) *)
 
 val string_of_endian : endian -> string
 
@@ -53,22 +54,26 @@ module LE : sig
 
   val endian : endian
 
-  cstruct pcap_header {
-    uint32_t magic_number;   (* magic number *)
-    uint16_t version_major;  (* major version number *)
-    uint16_t version_minor;  (* minor version number *)
-    uint32_t thiszone;       (* GMT to local correction *)
-    uint32_t sigfigs;        (* accuracy of timestamps *)
-    uint32_t snaplen;        (* max length of captured packets, in octets *)
-    uint32_t network         (* data link type *)
-  } as little_endian
+  [%%cstruct
+      type pcap_header = {
+        magic_number: uint32_t;  (* magic number *)
+        version_major: uint16_t; (* major version number *)
+        version_minor: uint16_t; (* minor version number *)
+        thiszone: uint32_t;      (* GMT to local correction *)
+        sigfigs: uint32_t;       (* accuracy of timestamps *)
+        snaplen: uint32_t;       (* max length of captured packets, octets *)
+        network: uint32_t        (* data link type *)
+      } [@@little_endian]
+  ]
 
-  cstruct pcap_packet {
-    uint32_t ts_sec;         (* timestamp seconds *)
-    uint32_t ts_usec;        (* timestamp microseconds *)
-    uint32_t incl_len;       (* number of octets of packet saved in file *)
-    uint32_t orig_len        (* actual length of packet *)
-  } as little_endian
+  [%%cstruct
+      type pcap_packet = {
+        ts_sec: uint32_t;       (* timestamp seconds *)
+        ts_usec: uint32_t;      (* timestamp microseconds *)
+        incl_len: uint32_t;     (* number of octets of packet saved in file *)
+        orig_len: uint32_t      (* actual length of packet *)
+      } [@@little_endian]
+  ]
 
 end
 
@@ -76,23 +81,27 @@ module BE : sig
 
   val endian : endian
 
-  cstruct pcap_header {
-    uint32_t magic_number;   (* magic number *)
-    uint16_t version_major;  (* major version number *)
-    uint16_t version_minor;  (* minor version number *)
-    uint32_t thiszone;       (* GMT to local correction *)
-    uint32_t sigfigs;        (* accuracy of timestamps *)
-    uint32_t snaplen;        (* max length of captured packets, in octets *)
-    uint32_t network         (* data link type *)
-  } as big_endian
+  [%%cstruct
+      type pcap_header = {
+        magic_number: uint32_t;  (* magic number *)
+        version_major: uint16_t; (* major version number *)
+        version_minor: uint16_t; (* minor version number *)
+        thiszone: uint32_t;      (* GMT to local correction *)
+        sigfigs: uint32_t;       (* accuracy of timestamps *)
+        snaplen: uint32_t;       (* max length of captured packets, octets *)
+        network: uint32_t        (* data link type *)
+      } [@@big_endian]
+  ]
 
-  cstruct pcap_packet {
-    uint32_t ts_sec;         (* timestamp seconds *)
-    uint32_t ts_usec;        (* timestamp microseconds *)
-    uint32_t incl_len;       (* number of octets of packet saved in file *)
-    uint32_t orig_len        (* actual length of packet *)
-  } as big_endian
-
+  [%%cstruct
+      type pcap_packet = {
+        ts_sec: uint32_t;       (* timestamp seconds *)
+        ts_usec: uint32_t;      (* timestamp microseconds *)
+        incl_len: uint32_t;     (* number of octets of packet saved in file *)
+        orig_len: uint32_t      (* actual length of packet *)
+      } [@@big_endian]
+  ]
+  
 end
 
 module type HDR = sig

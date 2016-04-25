@@ -24,7 +24,7 @@ Library pcap
   Path:               lib
   Findlibname:        pcap-format
   Modules:            Pcap
-  BuildDepends:       cstruct ( >= 0.5.0 ), cstruct.syntax
+  BuildDepends:       cstruct ( >= 0.5.0 ), cstruct.ppx
 
 Library mirage
   Build$:             flag(mirage)
@@ -33,7 +33,7 @@ Library mirage
   Findlibname:        mirage
   Findlibparent:      pcap
   Modules:            Pcap_mirage, Lwt_bounded_stream
-  BuildDepends:       pcap-format, lwt, lwt.syntax
+  BuildDepends:       pcap-format, lwt
 
 Executable print
   Build$:             flag(unix)
