@@ -1,18 +1,22 @@
-OASISFormat: 0.3
-Name:        pcap
-Version:     0.3.3
-Synopsis:    Pcap tools
-Authors:     Anil Madhavapeddy, Dave Scott
+OASISFormat: 0.4
+Name:        pcap-format
+Version:     0.3.4
+Synopsis:    PCAP tools
+Authors:     Anil Madhavapeddy, Dave Scott, Richard Mortier
 License:     ISC
-Plugins:     META (0.2)
 BuildTools:  ocamlbuild
 
+AlphaFeatures: ocamlbuild_more_args, pure_interface
+
+Plugins: META (0.4), DevFiles (0.4)
+XDevFilesEnableConfigure: false
+
 Flag unix
-  Description: build the Unix binary
+  Description: build the Unix targets
   Default: false
 
 Flag mirage
-  Description: build the mirage library
+  Description: build the Mirage targets
   Default: false
 
 Library pcap
@@ -29,7 +33,7 @@ Library mirage
   Findlibname:        mirage
   Findlibparent:      pcap
   Modules:            Pcap_mirage, Lwt_bounded_stream
-  BuildDepends:       mirage-net, pcap-format, lwt, lwt.syntax
+  BuildDepends:       pcap-format, lwt, lwt.syntax
 
 Executable print
   Build$:             flag(unix)
@@ -40,11 +44,15 @@ Executable print
   Install:            false
   BuildDepends:       lwt, lwt.unix, pcap-format
 
-Executable test
+Executable "test"
   Path:               lib_test
   MainIs:             test.ml
   Build$:             flag(tests)
-  Custom:             true
   CompiledObject:     best
   Install:            false
   BuildDepends:       lwt, lwt.unix, cstruct, pcap-format, oUnit
+
+Test "test"
+  Run$: flag(tests)
+  TestTools: test
+  Command: $test

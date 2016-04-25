@@ -1,8 +1,9 @@
 # OASIS_START
-# DO NOT EDIT (digest: 7fe842995f4991c2b872623f87cbdd5e)
-# Ignore VCS directories, you can use the same kind of rule outside 
-# OASIS_START/STOP if you want to exclude directories that contains 
+# DO NOT EDIT (digest: 26ff8ea59043f4a25063712b3259441a)
+# Ignore VCS directories, you can use the same kind of rule outside
+# OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
+true: annot, bin_annot
 <**/.svn>: -traverse
 <**/.svn>: not_hygienic
 ".bzr": -traverse
@@ -15,43 +16,38 @@
 "_darcs": not_hygienic
 # Library pcap
 "lib/pcap.cmxs": use_pcap
-<lib/*.ml{,i}>: pkg_cstruct
-<lib/*.ml{,i}>: pkg_cstruct.syntax
+<lib/*.ml{,i,y}>: pkg_cstruct
+<lib/*.ml{,i,y}>: pkg_cstruct.syntax
 # Library mirage
 "mirage/mirage.cmxs": use_mirage
-<mirage/*.ml{,i}>: use_pcap
-<mirage/*.ml{,i}>: pkg_lwt
-<mirage/*.ml{,i}>: pkg_cstruct
-<mirage/*.ml{,i}>: pkg_mirage-net
-<mirage/*.ml{,i}>: pkg_lwt.syntax
-<mirage/*.ml{,i}>: pkg_cstruct.syntax
+<mirage/*.ml{,i,y}>: pkg_cstruct
+<mirage/*.ml{,i,y}>: pkg_cstruct.syntax
+<mirage/*.ml{,i,y}>: pkg_lwt
+<mirage/*.ml{,i,y}>: pkg_lwt.syntax
+<mirage/*.ml{,i,y}>: use_pcap
 # Executable print
-<print/print.{native,byte}>: use_pcap
-<print/print.{native,byte}>: pkg_lwt
-<print/print.{native,byte}>: pkg_lwt.unix
 <print/print.{native,byte}>: pkg_cstruct
 <print/print.{native,byte}>: pkg_cstruct.syntax
-<print/*.ml{,i}>: use_pcap
-<print/*.ml{,i}>: pkg_lwt
-<print/*.ml{,i}>: pkg_lwt.unix
-<print/*.ml{,i}>: pkg_cstruct
-<print/*.ml{,i}>: pkg_cstruct.syntax
+<print/print.{native,byte}>: pkg_lwt
+<print/print.{native,byte}>: pkg_lwt.unix
+<print/print.{native,byte}>: use_pcap
+<print/*.ml{,i,y}>: pkg_cstruct
+<print/*.ml{,i,y}>: pkg_cstruct.syntax
+<print/*.ml{,i,y}>: pkg_lwt
+<print/*.ml{,i,y}>: pkg_lwt.unix
+<print/*.ml{,i,y}>: use_pcap
 <print/print.{native,byte}>: custom
 # Executable test
-<lib_test/test.{native,byte}>: use_pcap
+<lib_test/test.{native,byte}>: pkg_cstruct
+<lib_test/test.{native,byte}>: pkg_cstruct.syntax
 <lib_test/test.{native,byte}>: pkg_lwt
 <lib_test/test.{native,byte}>: pkg_lwt.unix
-<lib_test/test.{native,byte}>: pkg_cstruct
 <lib_test/test.{native,byte}>: pkg_oUnit
-<lib_test/test.{native,byte}>: pkg_cstruct.syntax
-<lib_test/*.ml{,i}>: use_pcap
-<lib_test/*.ml{,i}>: pkg_lwt
-<lib_test/*.ml{,i}>: pkg_lwt.unix
-<lib_test/*.ml{,i}>: pkg_cstruct
-<lib_test/*.ml{,i}>: pkg_oUnit
-<lib_test/*.ml{,i}>: pkg_cstruct.syntax
-<lib_test/test.{native,byte}>: custom
+<lib_test/test.{native,byte}>: use_pcap
+<lib_test/*.ml{,i,y}>: pkg_cstruct
+<lib_test/*.ml{,i,y}>: pkg_cstruct.syntax
+<lib_test/*.ml{,i,y}>: pkg_lwt
+<lib_test/*.ml{,i,y}>: pkg_lwt.unix
+<lib_test/*.ml{,i,y}>: pkg_oUnit
+<lib_test/*.ml{,i,y}>: use_pcap
 # OASIS_STOP
-<**/*.ml{,i}>: syntax_camlp4o, pkg_camlp4
-true: annot
-

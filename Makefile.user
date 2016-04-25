@@ -1,0 +1,11 @@
+.PHONY: setup-clean setup
+
+setup-clean: distclean
+	oasis setup-clean
+	$(RM) setup.* _tags configure myocamlbuild.ml
+	$(RM) lib/META lib/*.ml*lib lib/*.mlpack
+
+setup.ml: _oasis
+	oasis setup
+
+setup: setup.ml setup.data
