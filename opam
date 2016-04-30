@@ -2,7 +2,7 @@ opam-version: "1.2"
 maintainer: "dave@recoil.org"
 authors: [ "Anil Madhavapeddy" "Dave Scott" "Richard Mortier" ]
 license: "ISC"
-version: "0.5"
+version: "0.4.0"
 homepage: "https://github.com/mirage/ocaml-pcap"
 dev-repo: "https://github.com/mirage/ocaml-pcap.git"
 bug-reports: "https://github.com/mirage/ocaml-pcap/issues"
