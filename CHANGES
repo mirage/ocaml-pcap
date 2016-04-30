@@ -1,3 +1,8 @@
+0.4.0 (30-Apr-2016):
+* add an opam file
+* replace camlp4 with ppx
+* add windows support
+
 0.3.3 (25-Jul-2013):
 * Add Lwt_bounded implementation to constrain size of packet captures.
 * Update package name to pcap-format
