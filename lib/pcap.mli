@@ -16,6 +16,11 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
+(** PCAP encoding and encoding
+
+    {e %%VERSION%% - {{:%%PKG_HOMEPAGE%% }homepage}}
+*)
+
 val major_version: int
 (** Major version of the pcap format which we understand *)
 
