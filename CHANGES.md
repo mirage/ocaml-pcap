@@ -1,4 +1,4 @@
-## ?? (??)
+## 0.5.0 (2017-02-03)
 
 * removed mirage and print sublibrary
 * converted build system to topkg
