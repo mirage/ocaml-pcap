@@ -1,5 +1,5 @@
 opam-version: "1.2"
-maintainer:   "dave@recoil.org"
+maintainer:   "Dave Scott <dave@recoil.org>"
 authors:      [ "Anil Madhavapeddy" "Dave Scott" "Richard Mortier" ]
 license:      "ISC"
 homepage:     "https://github.com/mirage/ocaml-pcap"
@@ -21,6 +21,6 @@ depends: [
   "ocamlbuild" {build}
   "topkg"      {build & >= "0.8.0"}
   "ppx_tools"  {build}
-  "cstruct"    {>= "1.9.0"}
+  "cstruct"            {>= "1.9.0"}
   "ounit"      {test}
 ]
