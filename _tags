@@ -3,5 +3,5 @@ true : warn(+A)
 true : package(cstruct)
 "lib" : include
 
-<lib/pcap.{ml,mli}>: package(cstruct.ppx)
+<lib/pcap.{ml,mli}>: package(ppx_cstruct)
 <lib_test/test.{ml,native}>: package(oUnit)

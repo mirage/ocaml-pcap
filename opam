@@ -22,5 +22,6 @@ depends: [
   "topkg"      {build & >= "0.8.0"}
   "ppx_tools"  {build}
   "cstruct"            {>= "1.9.0"}
+  "ppx_cstruct"
   "ounit"      {test}
 ]
