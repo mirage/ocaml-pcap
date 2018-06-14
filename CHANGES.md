@@ -1,3 +1,7 @@
+## 0.5.1 (2018-06-14)
+
+* build with jbuilder
+
 ## 0.5.0 (2017-02-03)
 
 * removed mirage and print sublibrary
