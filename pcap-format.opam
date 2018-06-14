@@ -9,17 +9,17 @@ doc:          "https://mirage.github.io/ocaml-pcap/"
 tags:         [ "org:mirage" "org:xapi-project" ]
 
 build: [
-  [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" "--tests" "false" ]
+  [ "jbuilder" "subst"] {pinned}
+  [ "jbuilder" "build" "-p" name "-j" jobs ]
 ]
-build-test: [
-  [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" "--tests" "true" ]
-  [ "ocaml" "pkg/pkg.ml" "test" ]
+
+build-test:[
+  [ "jbuilder" "subst"] {pinned}
+  [ "jbuilder" "runtest" "-p" name "-j" jobs ]
 ]
 
 depends: [
-  "ocamlfind"  {build}
-  "ocamlbuild" {build}
-  "topkg"      {build & >= "0.8.0"}
+  "jbuilder" {build & >="1.0+beta10"}
   "ppx_tools"  {build}
   "cstruct"            {>= "1.9.0"}
   "ppx_cstruct"
