@@ -1,7 +1,0 @@
-true : color(always), bin_annot, safe_string, principal
-true : warn(+A)
-true : package(cstruct)
-"lib" : include
-
-<lib/pcap.{ml,mli}>: package(ppx_cstruct)
-<lib_test/test.{ml,native}>: package(oUnit)

@@ -15,7 +15,7 @@
 open Pcap
 open OUnit
 
-let example_file = "lib_test/dhcp.pcap"
+let example_file = "dhcp.pcap"
 
 (* Note this will leak fds and memory *)
 
