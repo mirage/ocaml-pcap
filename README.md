@@ -9,7 +9,7 @@ both endianess, including endianess detection.
 
     opam install pcap-format
 
-If you don't use `opam` consult the [`opam`](opam) file for build
+If you don't use `opam` consult the [`pcap-format.opam`](pcap-format.opam) file for build
 instructions.
 
 ### Documentation
