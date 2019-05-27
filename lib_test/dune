@@ -1,6 +1,6 @@
 (executable
  (name test)
- (libraries pcap-format oUnit bigarray))
+ (libraries pcap-format oUnit mmap))
 
 (alias
  (name runtest)

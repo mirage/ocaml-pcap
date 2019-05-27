@@ -13,6 +13,7 @@ depends: [
   "cstruct" {>= "1.9.0"}
   "ppx_cstruct"
   "ounit" {with-test}
+  "mmap" {with-test}
 ]
 build: [
   ["dune" "subst"] {pinned}
