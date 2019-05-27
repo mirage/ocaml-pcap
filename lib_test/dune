@@ -1,0 +1,11 @@
+(executable
+ (name test)
+ (libraries pcap-format oUnit bigarray))
+
+(alias
+ (name runtest)
+ (deps
+  (:< test.exe)
+  dhcp.pcap)
+ (action
+  (run %{<})))
