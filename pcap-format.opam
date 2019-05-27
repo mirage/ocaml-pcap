@@ -21,7 +21,7 @@ build: [
   ["dune" "runtest" "-p" name "-j" jobs] {with-test}
 ]
 dev-repo: "git+https://github.com/mirage/ocaml-pcap.git"
-synopsis: "decode and encode PCAP (packet capture) files"
+synopsis: "Decode and encode PCAP (packet capture) files"
 description: """
 pcap-format provides an interface to encode and decode pcap files, dealing with
 both endianess, including endianess detection.
