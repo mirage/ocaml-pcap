@@ -1,3 +1,9 @@
+## 0.5.2 (2019-05-27)
+
+* port to dune (@avsm)
+* upgrade metadata to opam 2.0 (@avsm)
+* test on OCaml 4.07 (@avsm)
+
 ## 0.5.1 (2018-06-14)
 
 * build with jbuilder
