@@ -1,11 +1,3 @@
-(executable
+(test
  (name test)
- (libraries pcap-format oUnit mmap))
-
-(alias
- (name runtest)
- (deps
-  (:< test.exe)
-  dhcp.pcap)
- (action
-  (run %{<})))
+ (libraries pcap-format oUnit))

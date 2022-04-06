@@ -21,7 +21,7 @@ let example_file = "dhcp.pcap"
 
 let open_file filename =
   let fd = Unix.(openfile filename [O_RDONLY] 0) in
-  let ba = Bigarray.(array1_of_genarray (Mmap.V1.map_file fd Bigarray.char c_layout false [|-1|])) in
+  let ba = Bigarray.(array1_of_genarray (Unix.map_file fd Bigarray.char c_layout false [|-1|])) in
   Cstruct.of_bigarray ba
 
 let read_header filename =
