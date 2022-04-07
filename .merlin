@@ -1,5 +1,0 @@
-S lib
-S lib_test
-B _build/**
-
-PKG lwt cstruct cstruct.ppx pcap-format oUnit

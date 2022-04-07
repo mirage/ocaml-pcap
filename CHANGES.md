@@ -1,3 +1,9 @@
+## v0.6.0 (2022-04-07)
+
+* Remove the "build" directive on dune dependency (@CraigFE, #33)
+* Remove unused "ppx_tools" dependency (@kit-ty-kate, #35)
+* Remove "mmap" dependency, require OCaml 4.08.0 (@hannesm, #36)
+
 ## 0.5.2 (2019-05-27)
 
 * port to dune (@avsm)
