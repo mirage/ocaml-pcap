@@ -12,7 +12,6 @@ depends: [
   "cstruct" {>= "1.9.0"}
   "ppx_cstruct" {> "0"}
   "ounit" {with-test}
-  "mmap" {with-test}
 ]
 build: [
   ["dune" "subst"] {dev}
