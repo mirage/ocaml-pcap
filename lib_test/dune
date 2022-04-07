@@ -1,3 +1,4 @@
 (test
  (name test)
+ (deps dhcp.pcap)
  (libraries pcap-format oUnit))
