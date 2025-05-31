@@ -24,3 +24,4 @@ description: """
 pcap-format provides an interface to encode and decode pcap files, dealing with
 both endianess, including endianess detection.
 """
+x-maintenance-intent: [ "(latest)" ]
